@@ -73,14 +73,16 @@ This module can be called in command line and connects to the host/port and rece
 ## Examples
 
 python3 pySendFile.py -f mytext.txt -hn localhost -p 12000
-Server listening....
-Got connection from ('127.0.0.1', 39704)
-Server received: data = b'Hello server TOTO-7Z845TT'
-Done sending
+
+    Server listening....
+    Got connection from ('127.0.0.1', 39704)
+    Server received: data = b'Hello server TOTO-7Z845TT'
+    Done sending
 
 python3 pyReceiveFile.py -f result.txt -hn localhost -p 12000
-File opened
-Receiving data...
-data = b'Hello\nThis is sample data\n\xc2\xabk\xc3\xbc\xc3\x9f\xc3\xae\xc2\xbb\n\xe2\x80\x9c\xd0\x8c\xcf\x8d\xd0\x91\xd0\x87\xe2\x80\x9d\n\xf0\x9f\x98\x80\xf0\x9f\x98\x89\n\xf0\x9f\x98\x8b\n'
-Successfully got the file
-Connection closed
+
+    File opened
+    Receiving data...
+    data = b'Hello\nThis is sample data\n\xc2\xabk\xc3\xbc\xc3\x9f\xc3\xae\xc2\xbb\n\xe2\x80\x9c\xd0\x8c\xcf\x8d\xd0\x91\xd0\x87\xe2\x80\x9d\n\xf0\x9f\x98\x80\xf0\x9f\x98\x89\n\xf0\x9f\x98\x8b\n'
+    Successfully got the file
+    Connection closed
