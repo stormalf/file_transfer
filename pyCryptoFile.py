@@ -3,10 +3,9 @@ from Crypto.Cipher import PKCS1_OAEP
 import base64
 import os.path 
 import argparse
-import os.path
 
 
-__version__ = "1.0.0"
+__version__ = "1.0.2"
 
 
 def pyCryptoFileVersion():
