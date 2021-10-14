@@ -1,26 +1,16 @@
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_OAEP
 import base64
 import os.path 
 import argparse
 
-
-__version__ = "1.0.3"
+__version__ = "1.0.4"
 
 
 def pyCryptoFileVersion():
     return f"pyCryptoFile version : {__version__}"
-
-def generate_keys():
-    modulus_length = 2048
-
-    key = RSA.generate(modulus_length)
-    #print (key.exportKey())
-
-    pub_key = key.publickey()
-    #print (pub_key.exportKey())
-
-    return key, pub_key
 
 
 def get_private_key(privateKeyFile: str = ""):
@@ -59,18 +49,9 @@ def decrypt_private_key(encoded_encrypted_msg, private_key):
     decoded_decrypted_msg = encryptor.decrypt(decoded_encrypted_msg)
     return decoded_decrypted_msg
 
-def main(filename: str = "", mode: str = "encrypt", keyfile: str = "") -> bytes :
+def pyCryptoFile(filename: str = "", mode: str = "encrypt", keyfile: str = "") -> bytes :
   isFile = False
   data = b''
-  #generate keys for testing purpose
-  if filename == "":
-    private, public = generate_keys()
-    print (private)
-    message = b'Hello world'
-    encoded = encrypt_public_key(message, public)
-    decrypt_private_key(encoded, private)
-    return encoded
-  #if file to encrypt/decrypt  
   isFile = os.path.exists(filename)
   if not isFile:
     print(f"File doesn't exist {filename}!")
@@ -95,10 +76,7 @@ def main(filename: str = "", mode: str = "encrypt", keyfile: str = "") -> bytes 
     with open(filename, "rb") as f:
       decoded = decoded + decrypt_private_key(f.read(), private)
     return decoded     
-      
-
-
-
+     
 
 if __name__== "__main__":
     parser = argparse.ArgumentParser(description="pyCryptoFile is a python3 program that encrypts, decrypts using ssh key encryption")
@@ -107,5 +85,4 @@ if __name__== "__main__":
     parser.add_argument('-m', '--mode', help='encrypt/decrypt mode', default="encrypt", choices=['encrypt', 'decrypt'], required=False)
     parser.add_argument('-k', '--keyfile', help='public key file if encrypt mode or private key file if decrypt mode', default="", required=False)
     args = parser.parse_args()
-    data = main(filename=args.file, mode=args.mode, keyfile=args.keyfile)
-    print(data.decode("utf-8"))
+    data = pyCryptoFile(filename=args.file, mode=args.mode, keyfile=args.keyfile)
