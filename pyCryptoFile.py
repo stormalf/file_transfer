@@ -86,3 +86,4 @@ if __name__== "__main__":
     parser.add_argument('-k', '--keyfile', help='public key file if encrypt mode or private key file if decrypt mode', default="", required=False)
     args = parser.parse_args()
     data = pyCryptoFile(filename=args.file, mode=args.mode, keyfile=args.keyfile)
+    print(data)
