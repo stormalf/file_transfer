@@ -7,7 +7,7 @@ import os.path
 import argparse
 
 
-__version__ = "1.0.4"
+__version__ = "1.0.5"
 
 MAXBYTESIN=128
 MAXBYTESOUT=344
