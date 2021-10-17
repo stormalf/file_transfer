@@ -86,3 +86,7 @@ python3 pyReceiveFile.py -f result.txt -hn localhost -p 12000
     data = b'Hello\nThis is sample data\n\xc2\xabk\xc3\xbc\xc3\x9f\xc3\xae\xc2\xbb\n\xe2\x80\x9c\xd0\x8c\xcf\x8d\xd0\x91\xd0\x87\xe2\x80\x9d\n\xf0\x9f\x98\x80\xf0\x9f\x98\x89\n\xf0\x9f\x98\x8b\n'
     Successfully got the file
     Connection closed
+
+## issues
+
+for now I try to encrypt/decrypt gif and pdfs but it doesn't work.
