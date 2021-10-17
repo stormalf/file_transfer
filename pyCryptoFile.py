@@ -87,8 +87,6 @@ def pyCryptoFile(filename: str = "", mode: str = "encrypt", keyfile: str = "") -
       while tmp:
         tmp =  f.read(MAXBYTESOUT) 
         decoded = decoded + decrypt_private_key(tmp, private)        
-
-      decoded = decoded + tmp
     return decoded     
      
 
