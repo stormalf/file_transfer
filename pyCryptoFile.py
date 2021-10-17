@@ -6,8 +6,11 @@ import base64
 import os.path 
 import argparse
 
+
 __version__ = "1.0.4"
 
+MAXBYTESIN=128
+MAXBYTESOUT=344
 
 def pyCryptoFileVersion():
     return f"pyCryptoFile version : {__version__}"
@@ -49,6 +52,7 @@ def decrypt_private_key(encoded_encrypted_msg, private_key):
     decoded_decrypted_msg = encryptor.decrypt(decoded_encrypted_msg)
     return decoded_decrypted_msg
 
+
 def pyCryptoFile(filename: str = "", mode: str = "encrypt", keyfile: str = "") -> bytes :
   isFile = False
   data = b''
@@ -64,8 +68,8 @@ def pyCryptoFile(filename: str = "", mode: str = "encrypt", keyfile: str = "") -
     encoded = b''
     public = get_public_key(keyfile)
     with open(filename, "rb") as f:
-      encoded = encoded + encrypt_public_key(f.read(), public)
-      return encoded
+      encoded = encoded + encrypt_public_key(f.read(MAXBYTESIN), public)
+    return encoded
   elif mode == "decrypt":
     isFile = os.path.exists(keyfile)
     if not isFile:
@@ -74,7 +78,7 @@ def pyCryptoFile(filename: str = "", mode: str = "encrypt", keyfile: str = "") -
     decoded = b''
     private = get_private_key(keyfile)
     with open(filename, "rb") as f:
-      decoded = decoded + decrypt_private_key(f.read(), private)
+      decoded = decoded + decrypt_private_key(f.read(MAXBYTESOUT), private)
     return decoded     
      
 
