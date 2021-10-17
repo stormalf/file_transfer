@@ -68,7 +68,11 @@ def pyCryptoFile(filename: str = "", mode: str = "encrypt", keyfile: str = "") -
     encoded = b''
     public = get_public_key(keyfile)
     with open(filename, "rb") as f:
-      encoded = encoded + encrypt_public_key(f.read(MAXBYTESIN), public)
+      tmp = f.read(MAXBYTESIN)
+      encoded = encoded + encrypt_public_key(tmp, public)  
+      while tmp:
+        tmp = f.read(MAXBYTESIN)
+        encoded = encoded + encrypt_public_key(tmp, public)  
     return encoded
   elif mode == "decrypt":
     isFile = os.path.exists(keyfile)
@@ -78,7 +82,13 @@ def pyCryptoFile(filename: str = "", mode: str = "encrypt", keyfile: str = "") -
     decoded = b''
     private = get_private_key(keyfile)
     with open(filename, "rb") as f:
-      decoded = decoded + decrypt_private_key(f.read(MAXBYTESOUT), private)
+      tmp =  f.read(MAXBYTESOUT)
+      decoded = decoded + decrypt_private_key(tmp, private)
+      while tmp:
+        tmp =  f.read(MAXBYTESOUT) 
+        decoded = decoded + decrypt_private_key(tmp, private)        
+
+      decoded = decoded + tmp
     return decoded     
      
 
