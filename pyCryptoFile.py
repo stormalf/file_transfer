@@ -7,7 +7,7 @@ import os.path
 import argparse
 
 
-__version__ = "1.0.5"
+__version__ = "1.0.7"
 
 MAXBYTESIN=128
 MAXBYTESOUT=344
@@ -44,11 +44,13 @@ def encrypt_public_key(a_message, public_key):
     encryptor = PKCS1_OAEP.new(public_key)
     encrypted_msg = encryptor.encrypt(a_message)
     encoded_encrypted_msg = base64.b64encode(encrypted_msg)
+    #encoded_encrypted_msg = base64.encodebytes(encrypted_msg)
     return encoded_encrypted_msg
 
 def decrypt_private_key(encoded_encrypted_msg, private_key):
     encryptor = PKCS1_OAEP.new(private_key)
     decoded_encrypted_msg = base64.b64decode(encoded_encrypted_msg)
+    #decoded_encrypted_msg = base64.decodebytes(encoded_encrypted_msg)
     decoded_decrypted_msg = encryptor.decrypt(decoded_encrypted_msg)
     return decoded_decrypted_msg
 
@@ -83,10 +85,16 @@ def pyCryptoFile(filename: str = "", mode: str = "encrypt", keyfile: str = "") -
     private = get_private_key(keyfile)
     with open(filename, "rb") as f:
       tmp =  f.read(MAXBYTESOUT)
-      decoded = decoded + decrypt_private_key(tmp, private)
+      if len(tmp) > 0 :
+        decoded = decoded + decrypt_private_key(tmp, private)
+      else:
+        decoded = decoded + tmp        
       while tmp:
         tmp =  f.read(MAXBYTESOUT) 
-        decoded = decoded + decrypt_private_key(tmp, private)        
+        if len(tmp) > 0 :
+          decoded = decoded + decrypt_private_key(tmp, private)
+        else:
+          decoded = decoded + tmp          
     return decoded     
      
 

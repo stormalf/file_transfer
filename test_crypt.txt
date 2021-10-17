@@ -1,2 +1,0 @@
-File doesn't exist thomann.gif!
-b''
