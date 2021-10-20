@@ -12,6 +12,7 @@ This module can be called in command line :
 python3 pyCryptoFile.py -h
 
     usage: pyCryptoFile.py [-h] [-V] [-f FILE] [-m {encrypt,decrypt}] [-k KEYFILE]
+                        [-o OUTPUTFILE]
 
     pyCryptoFile is a python3 program that encrypts, decrypts using ssh key encryption
 
@@ -22,19 +23,30 @@ python3 pyCryptoFile.py -h
     -m {encrypt,decrypt}, --mode {encrypt,decrypt}
                             encrypt/decrypt mode
     -k KEYFILE, --keyfile KEYFILE
-                            public key file if encrypt mode or private key file if decrypt mode
+                            public key file if encrypt mode or private key file if decrypt
+                            mode
+    -o OUTPUTFILE, --outputfile OUTPUTFILE
+                            outputfile by default it will be the file with .enc or .dec
+                            extension
 
-example to encrypt a file content and put in another file :
-python3 pyCryptoFile.py -f mytext2.txt -k ~/.ssh/id_rsa.pub > mytextcrypted.txt
+example to encrypt a file content and put in another file by default same as file with .enc extension :
+
+    python3 pyCryptoFile.py -f mytext2.txt -k ~/.ssh/id_rsa.pub
+
+this generates a mytext2.txt.enc by default
 
 example to decrypt a file content and put in another file :
-python3 pyCryptoFile.py -f mytextcrypted.txt -k ~/.ssh/id_rsa -m decrypt > mydecrypted.txt
 
-This module provides some useful functions
+    python3 pyCryptoFile.py -f mytextcrypted.txt -k ~/.ssh/id_rsa -m decrypt -o mytext_decrypt.txt
+
+This generates the mytext_decrypt.txt if -o option is missing it will generate mytextcrypted.txt.dec
+
+This module provides some useful functions. You can find pycryptofile in pypi.
 
 ## pySendFile
 
 This module can be called in command line and starts the server in the listening port default 12312 :
+
 python3 pySendFile.py -h
 
     usage: pySendFile.py [-h] [-V] -f FILE [-hn HOSTNAME] [-p PORT] [-k KEYFILE]
@@ -54,6 +66,7 @@ python3 pySendFile.py -h
 ## pyReceiveFile
 
 python3 pyReceiveFile.py -h
+
 This module can be called in command line and connects to the host/port and receives the data :
 
     usage: pyReceiveFile.py [-h] [-V] [-f FILE] [-hn HOSTNAME] [-p PORT] [-k KEYFILE]
@@ -86,7 +99,3 @@ python3 pyReceiveFile.py -f result.txt -hn localhost -p 12000
     data = b'Hello\nThis is sample data\n\xc2\xabk\xc3\xbc\xc3\x9f\xc3\xae\xc2\xbb\n\xe2\x80\x9c\xd0\x8c\xcf\x8d\xd0\x91\xd0\x87\xe2\x80\x9d\n\xf0\x9f\x98\x80\xf0\x9f\x98\x89\n\xf0\x9f\x98\x8b\n'
     Successfully got the file
     Connection closed
-
-## issues
-
-for now I try to encrypt/decrypt gif and pdfs but it doesn't work.

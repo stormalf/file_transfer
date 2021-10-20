@@ -7,7 +7,7 @@ import os.path
 import argparse
 
 
-__version__ = "1.0.7"
+__version__ = "1.0.8"
 
 MAXBYTESIN=128
 MAXBYTESOUT=344
@@ -55,7 +55,7 @@ def decrypt_private_key(encoded_encrypted_msg, private_key):
     return decoded_decrypted_msg
 
 
-def pyCryptoFile(filename: str = "", mode: str = "encrypt", keyfile: str = "") -> bytes :
+def pyCryptoFile(filename: str = "", mode: str = "encrypt", keyfile: str = "", outputfile: str = "") -> bytes :
   isFile = False
   data = b''
   isFile = os.path.exists(filename)
@@ -67,35 +67,47 @@ def pyCryptoFile(filename: str = "", mode: str = "encrypt", keyfile: str = "") -
     if not isFile:
       print(f"key file doesn't exist {keyfile}!")
       return data 
+    if outputfile == "":
+      outputfile = filename + ".enc"       
     encoded = b''
+    encodedflow = b''
+    output = open(outputfile, "wb")  
     public = get_public_key(keyfile)
     with open(filename, "rb") as f:
       tmp = f.read(MAXBYTESIN)
-      encoded = encoded + encrypt_public_key(tmp, public)  
+      encoded = encrypt_public_key(tmp, public)  
+      encodedflow = encodedflow + encoded
       while tmp:
         tmp = f.read(MAXBYTESIN)
-        encoded = encoded + encrypt_public_key(tmp, public)  
-    return encoded
+        encoded = encrypt_public_key(tmp, public)  
+        encodedflow = encodedflow + encoded
+    output.write(encodedflow)        
+    output.close()
+    return encodedflow
   elif mode == "decrypt":
     isFile = os.path.exists(keyfile)
     if not isFile:
       print(f"key file doesn't exist {keyfile}!")
       return data
+    if outputfile == "":
+      outputfile = filename + ".dec"             
     decoded = b''
+    decodedflow = b''
+    output = open(outputfile, "wb")  
     private = get_private_key(keyfile)
     with open(filename, "rb") as f:
       tmp =  f.read(MAXBYTESOUT)
       if len(tmp) > 0 :
-        decoded = decoded + decrypt_private_key(tmp, private)
-      else:
-        decoded = decoded + tmp        
+        decoded = decrypt_private_key(tmp, private)
+        decodedflow = decodedflow + decoded        
       while tmp:
         tmp =  f.read(MAXBYTESOUT) 
-        if len(tmp) > 0 :
-          decoded = decoded + decrypt_private_key(tmp, private)
-        else:
-          decoded = decoded + tmp          
-    return decoded     
+        if len(tmp) > 0:
+          decoded = decrypt_private_key(tmp, private)
+          decodedflow = decodedflow + decoded
+    output.write(decodedflow)        
+    output.close()
+    return decodedflow
      
 
 if __name__== "__main__":
@@ -104,6 +116,7 @@ if __name__== "__main__":
     parser.add_argument('-f', '--file', help='file to encrypt/decrypt', default='', required=False)
     parser.add_argument('-m', '--mode', help='encrypt/decrypt mode', default="encrypt", choices=['encrypt', 'decrypt'], required=False)
     parser.add_argument('-k', '--keyfile', help='public key file if encrypt mode or private key file if decrypt mode', default="", required=False)
+    parser.add_argument('-o', '--outputfile', help='outputfile by default it will be the file with .enc or .dec extension', default="", required=False)    
     args = parser.parse_args()
-    data = pyCryptoFile(filename=args.file, mode=args.mode, keyfile=args.keyfile)
+    data = pyCryptoFile(filename=args.file, mode=args.mode, keyfile=args.keyfile, outputfile=args.outputfile)
     print(data)
